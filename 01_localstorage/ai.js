@@ -1,24 +1,9 @@
-// ============================================================
-//  ai.js — Claude (Anthropic) API integration + Demo Mode
-//
-//  Two ways to run the AI features:
-//   1. DEMO MODE (default): the AI is simulated locally in this file.
-//      No API key, no internet, no cost — instant and reliable, which
-//      makes it perfect for a screen recording.
-//   2. LIVE MODE: real calls to Claude. Turn Demo mode OFF and paste an
-//      API key. ⚠️ LOCAL PRACTICE ONLY — the key is visible in the
-//      browser, so never deploy this page publicly.
-//
-//  This file defines one global object, `AI`, used by script.js.
-// ============================================================
-
 const AI = (() => {
 	const API_URL = "https://api.anthropic.com/v1/messages";
-	const MODEL = "claude-opus-4-8"; // or "claude-haiku-4-5" for cheaper/faster
+	const MODEL = "claude-opus-4-8";
 	const KEY_STORAGE = "anthropic_api_key";
 	const DEMO_STORAGE = "ai_demo_mode";
 
-	// ---- settings helpers (stored in localStorage) ----
 	function getKey() {
 		return localStorage.getItem(KEY_STORAGE) || "";
 	}
@@ -30,43 +15,32 @@ const AI = (() => {
 	}
 	function isDemo() {
 		const v = localStorage.getItem(DEMO_STORAGE);
-		return v === null ? true : v === "true"; // default ON
+		return v === null ? true : v === "true";
 	}
 	function setDemo(on) {
 		localStorage.setItem(DEMO_STORAGE, on ? "true" : "false");
 	}
-	// AI is usable if we're simulating (demo) OR we have a real key.
 	function enabled() {
 		return isDemo() || hasKey();
 	}
 
-	// ========================================================
-	//  PUBLIC: the two features. Each picks demo or live.
-	// ========================================================
-
-	// Natural-language parse + auto priority + auto category + due date.
 	async function enrichTask(rawText) {
 		if (isDemo()) return mockEnrichTask(rawText);
 		return liveEnrichTask(rawText);
 	}
 
-	// A short plan for the day from the open tasks.
 	async function planDay(tasks) {
 		if (isDemo()) return mockPlanDay(tasks);
 		return livePlanDay(tasks);
 	}
 
-	// ========================================================
-	//  DEMO MODE — simulated AI (no network)
-	// ========================================================
 	function delay(ms) {
 		return new Promise((resolve) => setTimeout(resolve, ms));
 	}
 	function isoDate(d) {
-		return d.toISOString().slice(0, 10); // "YYYY-MM-DD"
+		return d.toISOString().slice(0, 10);
 	}
 
-	// figure out a due date from words like "today", "tomorrow", "friday"
 	function computeDueDate(raw) {
 		const t = raw.toLowerCase();
 		const now = new Date();
@@ -85,14 +59,13 @@ const AI = (() => {
 		for (let i = 0; i < 7; i++) {
 			if (new RegExp("\\b" + days[i] + "\\b").test(t)) {
 				let delta = (i - now.getDay() + 7) % 7;
-				if (delta === 0) delta = 7; // "friday" means the next friday
+				if (delta === 0) delta = 7;
 				return addDays(delta);
 			}
 		}
 		return "";
 	}
 
-	// strip date/urgency words out of the display text and tidy it up
 	function cleanText(raw) {
 		let s = raw
 			.replace(/\b(today|tonight|tomorrow)\b/gi, "")
@@ -103,8 +76,8 @@ const AI = (() => {
 			.replace(/\b(urgent|asap|important|critical)\b/gi, "")
 			.replace(/\b(maybe|sometime|eventually|whenever|someday)\b/gi, "")
 			.replace(/\s{2,}/g, " ")
-			.replace(/^[\s:,.\-]+/, "") // strip leftover leading punctuation
-			.replace(/[\s:,.\-]+$/, "") // ...and trailing
+			.replace(/^[\s:,.\-]+/, "")
+			.replace(/[\s:,.\-]+$/, "")
 			.trim();
 		if (!s) s = raw.trim();
 		return s.charAt(0).toUpperCase() + s.slice(1);
@@ -122,7 +95,6 @@ const AI = (() => {
 		return "medium";
 	}
 
-	// first matching rule wins — order matters
 	const CATEGORY_RULES = [
 		["health", /\b(gym|workout|run|doctor|dentist|medicine|meditat|yoga|health|appointment)\b/],
 		["finance", /\b(pay|bill|bank|invoice|tax|budget|rent|salary|money)\b/],
@@ -138,7 +110,7 @@ const AI = (() => {
 	}
 
 	async function mockEnrichTask(rawText) {
-		await delay(1300); // a visible pause so the "analyzing" animation reads on camera
+		await delay(1300);
 		const dueDate = computeDueDate(rawText);
 		return {
 			text: cleanText(rawText),
@@ -172,9 +144,6 @@ const AI = (() => {
 		return out;
 	}
 
-	// ========================================================
-	//  LIVE MODE — real Claude API calls
-	// ========================================================
 	async function callClaude(body) {
 		const res = await fetch(API_URL, {
 			method: "POST",
@@ -182,7 +151,6 @@ const AI = (() => {
 				"content-type": "application/json",
 				"x-api-key": getKey(),
 				"anthropic-version": "2023-06-01",
-				// Required so Anthropic allows the request straight from a browser:
 				"anthropic-dangerous-direct-browser-access": "true",
 			},
 			body: JSON.stringify(body),
@@ -202,7 +170,7 @@ const AI = (() => {
 				text: { type: "string" },
 				priority: { type: "string", enum: ["high", "medium", "low"] },
 				category: { type: "string" },
-				dueDate: { type: "string" }, // ISO date, or "" when there's no date
+				dueDate: { type: "string" },
 			},
 			required: ["text", "priority", "category", "dueDate"],
 			additionalProperties: false,
@@ -248,6 +216,5 @@ const AI = (() => {
 			.join("\n");
 	}
 
-	// Expose only what script.js needs.
 	return { getKey, setKey, hasKey, isDemo, setDemo, enabled, enrichTask, planDay };
 })();

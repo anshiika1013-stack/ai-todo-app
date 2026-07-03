@@ -36,7 +36,6 @@ body {
   100% { background-position: 0% 50%; }
 }
 
-/* ---- Card ---- */
 .app {
   position: relative;
   width: 100%;
@@ -85,7 +84,6 @@ body {
   50% { box-shadow: 0 0 22px rgba(201, 75, 221, 0.95); }
 }
 
-/* ---- AI settings ---- */
 .ai-setup {
   border: 1px solid var(--border);
   border-radius: 12px;
@@ -173,7 +171,6 @@ body {
 .ai-setup__status.is-ok { color: #6ee7b7; }
 .ai-setup__status.is-err { color: var(--danger); }
 
-/* ---- Add form ---- */
 .todo-form {
   display: flex;
   gap: 0.5rem;
@@ -223,7 +220,6 @@ body {
   transform: none;
 }
 
-/* ---- Shimmering "AI is analyzing" bar ---- */
 .ai-analyzing {
   display: flex;
   align-items: center;
@@ -262,7 +258,6 @@ body {
   100% { transform: rotate(360deg); }
 }
 
-/* ---- Todo list ---- */
 .todo-list {
   list-style: none;
   display: flex;
@@ -286,7 +281,6 @@ body {
   box-shadow: 0 0 22px rgba(124, 92, 255, 0.15);
 }
 
-/* new-item entrance (added by JS only on the freshly-added task) */
 .todo-item--new {
   animation: itemIn 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
 }
@@ -346,7 +340,6 @@ body {
   background: rgba(251, 113, 133, 0.15);
 }
 
-/* ---- Badges ---- */
 .badge {
   font-size: 0.72rem;
   font-weight: 700;
@@ -357,7 +350,6 @@ body {
   border: 1px solid transparent;
 }
 
-/* staggered pop-in, but only on the newly-added item */
 .todo-item--new .badge {
   animation: badgePop 0.45s backwards;
 }
@@ -404,7 +396,6 @@ body {
 
 .todo-item.is-completed .badge { opacity: 0.5; }
 
-/* ---- Empty state ---- */
 .empty-state {
   text-align: center;
   color: var(--muted);
@@ -412,7 +403,6 @@ body {
   font-size: 0.95rem;
 }
 
-/* ---- Footer ---- */
 .todo-footer {
   display: flex;
   align-items: center;
@@ -463,7 +453,6 @@ body {
 
 .todo-footer__clear:hover { color: var(--danger); }
 
-/* ---- Plan my day ---- */
 .ai-plan {
   margin-top: 1.5rem;
 }
@@ -505,7 +494,6 @@ body {
   white-space: pre-wrap;
 }
 
-/* blinking cursor while the plan "types itself out" */
 .ai-plan__output.is-typing::after {
   content: "▋";
   color: var(--accent);
@@ -516,7 +504,6 @@ body {
   50% { opacity: 0; }
 }
 
-/* Utility */
 .hidden {
   display: none !important;
 }

@@ -10,13 +10,9 @@
   <main class="app">
     <h1 class="app__title">Todos <span class="app__ai-badge">AI</span></h1>
 
-    <!-- AI setup: paste your Anthropic API key to turn on the AI features.
-         LOCAL PRACTICE ONLY — see the warning below. -->
     <details class="ai-setup" id="ai-setup">
       <summary class="ai-setup__summary">✨ AI settings</summary>
 
-      <!-- Demo mode: simulate the AI locally so the features work instantly
-           with no key/internet — great for a screen recording. On by default. -->
       <label class="ai-setup__toggle">
         <input type="checkbox" id="demo-mode" />
         <span>Demo mode — simulate AI locally (no key or internet needed). Best for recording a quick demo.</span>
@@ -40,7 +36,6 @@
       <p id="ai-status" class="ai-setup__status"></p>
     </details>
 
-    <!-- Add a new todo -->
     <form id="todo-form" class="todo-form">
       <input
         id="todo-input"
@@ -53,19 +48,15 @@
       <button type="submit" class="todo-form__add" id="add_cta">Add</button>
     </form>
 
-    <!-- Shimmering "AI is working" bar, toggled by JS while enriching a task -->
     <div id="ai-analyzing" class="ai-analyzing hidden">
       <span class="ai-analyzing__spark">✦</span>
       <span class="ai-analyzing__text">Claude is analyzing your task…</span>
     </div>
 
-    <!-- List of todos: build <li> items from JS -->
     <ul id="todo-list" class="todo-list"></ul>
 
-    <!-- Shown when the list is empty (toggle with JS) -->
     <p id="empty-state" class="empty-state">Nothing here yet. Add your first todo!</p>
 
-    <!-- Footer: count, filters, clear completed -->
     <footer class="todo-footer">
       <span id="item-count" class="todo-footer__count">0 items left</span>
 
@@ -78,14 +69,12 @@
       <button id="clear-completed" class="todo-footer__clear">Clear completed</button>
     </footer>
 
-    <!-- AI: ask Claude to plan the day from your open tasks -->
     <section class="ai-plan">
       <button id="plan-day" class="ai-plan__btn" type="button">✨ Plan my day</button>
       <div id="plan-output" class="ai-plan__output hidden"></div>
     </section>
   </main>
 
-  <!-- ai.js defines the global AI helper; it must load BEFORE script.js -->
   <script src="ai.js"></script>
   <script src="script.js"></script>
 </body>
