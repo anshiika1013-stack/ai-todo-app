@@ -1,0 +1,17 @@
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Local editor / Claude Code settings (personal, not shared)
+.claude/settings.local.json
+
+# Node (in case you add a backend later)
+node_modules/
+npm-debug.log*
+.env
+.env.*
+
+# Never commit API keys or secrets
+*.key
+*.pem
+secrets.*
